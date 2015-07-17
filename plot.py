@@ -4,8 +4,9 @@ import glob
 
 # use glob.glob to find all the files
 filenames = glob.glob("data/inflammation-*.csv")
-# temporarily pick just the first three
-filenames = filenames[:3]
+# uncomment to temporarily pick just the first three
+# leaving this in here in case we need to test stuff later
+# filenames = filenames[:3]
 
 for filename in filenames:
     data = numpy.loadtxt(fname=filename, delimiter=',')
