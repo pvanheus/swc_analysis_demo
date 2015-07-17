@@ -2,12 +2,11 @@ import numpy
 import matplotlib.pyplot
 import glob
 
-# Here's a simple way to split the code into functions.
+# Here's a small change: now we only read the file in once and pass the data array into the functions.
 # How can we do this better?
-# We're fetching the data twice. Why don't we fetch it once, and pass the data array into both functions?
+# We keep recalculating the minima and maxima. Why don't we calculate these values once, and pass them into the functions?
 
-def check(filename):
-    data = numpy.loadtxt(fname=filename, delimiter=',')
+def check(data):
 
     # check if the maxima are linear
     if data.max(axis=0)[0] == 0 and data.max(axis=0)[20] == 20:
@@ -21,9 +20,7 @@ def check(filename):
     else:
         print "These minima look OK"
 
-def plot(filename):
-    data = numpy.loadtxt(fname=filename, delimiter=',')
-
+def plot(data):
     fig = matplotlib.pyplot.figure(figsize=(10.0, 3.0))
 
     axes1 = fig.add_subplot(1, 3, 1)
@@ -47,5 +44,6 @@ filenames = glob.glob("data/inflammation-*.csv")
 
 for filename in filenames:
     print filename
-    check(filename)
-    plot(filename)
+    data = numpy.loadtxt(fname=filename, delimiter=',')
+    check(data)
+    plot(data)
