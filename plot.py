@@ -2,25 +2,25 @@ import numpy
 import matplotlib.pyplot
 import glob
 
-# Here's a small change: now we only read the file in once and pass the data array into the functions.
+# Now we only calculate the means, maxima and minima once. Not only are we not repeating calculations unnecessarily, but we now use meaningful labels for these values when we use them.
 # How can we do this better?
-# We keep recalculating the minima and maxima. Why don't we calculate these values once, and pass them into the functions?
+# There's a lot of repetition inside these functions. Can we split them up into smaller functions?
 
-def check(data):
+def check(maxima, minima):
 
     # check if the maxima are linear
-    if data.max(axis=0)[0] == 0 and data.max(axis=0)[20] == 20:
+    if maxima[0] == 0 and maxima[20] == 20:
         print "These maxima are suspicious"
     else:
         print "These maxima look OK"
 
     # check if the minima are zero
-    if data.min(axis=0).sum() == 0:
+    if minima.sum() == 0:
         print "These minima are suspicious"
     else:
         print "These minima look OK"
 
-def plot(data):
+def plot(means, maxima, minima):
     fig = matplotlib.pyplot.figure(figsize=(10.0, 3.0))
 
     axes1 = fig.add_subplot(1, 3, 1)
@@ -28,13 +28,13 @@ def plot(data):
     axes3 = fig.add_subplot(1, 3, 3)
 
     axes1.set_ylabel('average')
-    axes1.plot(data.mean(axis=0))
+    axes1.plot(means)
 
     axes2.set_ylabel('max')
-    axes2.plot(data.max(axis=0))
+    axes2.plot(maxima)
 
     axes3.set_ylabel('min')
-    axes3.plot(data.min(axis=0))
+    axes3.plot(minima)
 
     fig.tight_layout()
 
@@ -44,6 +44,11 @@ filenames = glob.glob("data/inflammation-*.csv")
 
 for filename in filenames:
     print filename
+
     data = numpy.loadtxt(fname=filename, delimiter=',')
-    check(data)
-    plot(data)
+    minima = data.min(axis=0)
+    maxima = data.max(axis=0)
+    means = data.mean(axis=0)
+    
+    check(maxima, minima)
+    plot(means, maxima, minima)
