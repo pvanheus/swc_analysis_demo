@@ -2,18 +2,12 @@ import numpy
 import matplotlib.pyplot
 import glob
 
-# use glob.glob to find all the files
-filenames = glob.glob("data/inflammation-*.csv")
-# uncomment to temporarily pick just the first three
-# leaving this in here in case we need to test stuff later
-# filenames = filenames[:3]
+# Here's a simple way to split the code into functions.
+# How can we do this better?
+# We're fetching the data twice. Why don't we fetch it once, and pass the data array into both functions?
 
-for filename in filenames:
+def check(filename):
     data = numpy.loadtxt(fname=filename, delimiter=',')
-
-    print filename # so that we can see which datasets trigger warnings
-
-    # check for suspicious features in the data
 
     # check if the maxima are linear
     if data.max(axis=0)[0] == 0 and data.max(axis=0)[20] == 20:
@@ -26,6 +20,9 @@ for filename in filenames:
         print "These minima are suspicious"
     else:
         print "These minima look OK"
+
+def plot(filename):
+    data = numpy.loadtxt(fname=filename, delimiter=',')
 
     fig = matplotlib.pyplot.figure(figsize=(10.0, 3.0))
 
@@ -45,3 +42,10 @@ for filename in filenames:
     fig.tight_layout()
 
     matplotlib.pyplot.show(fig)
+
+filenames = glob.glob("data/inflammation-*.csv")
+
+for filename in filenames:
+    print filename
+    check(filename)
+    plot(filename)
