@@ -41,6 +41,7 @@ def plot(means, maxima, minima):
     matplotlib.pyplot.show(fig)
 
 filenames = glob.glob("data/inflammation-*.csv")
+filenames.sort()
 
 for filename in filenames:
     print filename
